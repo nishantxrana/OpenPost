@@ -1,9 +1,26 @@
- function App() {
+import {BrowserRouter,Route,Routes} from 'react-router-dom'
+import Home from './Routes/Home'
+import About from './Routes/About'
+import Project from './Routes/Project'
+import SignIn from './Routes/SignIn'
+import SignUp from './Routes/SignUp'
+import Dashboard from './Routes/Dashboard'
+import Header from './components/Header'
+
+function App() {
  
   return (
-    <>
-    <div className=' flex w-full h-screen justify-center items-center'><h1 className=' text-3xl text-red-500'>The app is working fine</h1></div>
-    </>
+    <BrowserRouter>
+    <Header />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/project' element={<Project />} />
+        <Route path='/signin' element={<SignIn />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
