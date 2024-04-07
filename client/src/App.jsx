@@ -1,10 +1,10 @@
 import {BrowserRouter,Route,Routes} from 'react-router-dom'
-import Home from './Routes/Home'
-import About from './Routes/About'
-import Project from './Routes/Project'
-import SignIn from './Routes/SignIn'
-import SignUp from './Routes/SignUp'
-import Dashboard from './Routes/Dashboard'
+import Home from './Pages/Home'
+import About from './Pages/About'
+import Project from './Pages/Project'
+import SignIn from './Pages/SignIn'
+import SignUp from './Pages/SignUp'
+import Dashboard from './Pages/Dashboard'
 import Header from './components/Header'
 
 function App() {
