@@ -11,7 +11,7 @@ function Header() {
     <Navbar className=" border-b-2">
       <Link
         to={"/"}
-        className=" text-sm sm:text-xl text-nowrap font-semibold dark:text-white p-2 bg-violet-400 rounded-full"
+        className=" text-sm sm:text-xl text-white text-nowrap font-semibold dark:text-white p-2 bg-black rounded-full"
       >
         OpenPost
       </Link>

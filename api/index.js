@@ -17,9 +17,19 @@ let port = 3000;
 const app = express()
 app.use(express.json());
 
+
 app.use('/api/user',userRoutes)
 app.use('/api/auth',auth)
 
 app.listen(port,()=>{
     console.log(`listening on ${port}`);
 })
+app.use((err,req,res,next)=>{
+    const message = err.message || 'internal error';
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+        success:false,
+        statusCode,
+        message,
+    });
+});
