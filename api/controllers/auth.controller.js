@@ -70,7 +70,7 @@ export const signin = async(req, res, next)=> {
     const {password:pas,...rest} = existingUser._doc
     // if password is correct send authentication token
     const token = jwt.sign({id : existingUser._id}, process.env.Token_key,{expiresIn:'1d'});
-    res.status(200).cookie('login_token',token,{httpOnly:true}).json({rest}); //TODO: in this we need to send cookie first 
+    res.status(200).cookie('login_token',token,{httpOnly:true}).json({rest,success:true,message:'successfully login'}); //TODO: in this we need to send cookie first 
     
     
   } catch (error) {
