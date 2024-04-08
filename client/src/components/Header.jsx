@@ -1,11 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Button, Navbar, TextInput } from "flowbite-react";
+import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 function Header() {
   const currentLocation = useLocation().pathname;
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <Navbar className=" border-b-2">
@@ -34,21 +36,45 @@ function Header() {
         <Button className="  w-12 h-10  hidden md:inline" color={"gray"} pill>
           <FaMoon />
         </Button>
-        <Link to={"/signin"}>
-          <Button outline gradientDuoTone="purpleToBlue" pill>
-            Sign In
-          </Button>
-        </Link>
+        {currentUser ? (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={<Avatar img={currentUser.rest.profilePic} rounded />}
+          >
+            <Dropdown.Header>
+             <span className="block mb-1"><span className=" font-semibold mr-1">User:</span>{currentUser.rest.username}</span>
+            
+             <span className="block"><span className=" font-semibold mr-1">Mail:</span>{currentUser.rest.email}</span>
+            </Dropdown.Header>
+            {/* <Dropdown.Divider/> */}
+            <Dropdown.Item>
+              <Link to={"/dashboard?tab/profile"}>Profile</Link>
+            </Dropdown.Item>
+            <Dropdown.Divider/>
+            <Dropdown.Item>
+              <Link to={"/dashboard?tab/profile"}>Sign Out</Link>
+            </Dropdown.Item>
+          </Dropdown>
+        ) : (
+          <Link to={"/signin"}>
+            <Button outline gradientDuoTone="purpleToBlue" pill>
+              Sign In
+            </Button>
+          </Link>
+        )}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link active={currentLocation === "/"} as={'div'}>  {/* TODO: remember to use as div bcz anchor tags can't be nestted */}
+        <Navbar.Link active={currentLocation === "/"} as={"div"}>
+          {" "}
+          {/* TODO: remember to use as div bcz anchor tags can't be nestted */}
           <Link to={"/"}>Home</Link>
         </Navbar.Link>
-        <Navbar.Link active={currentLocation === "/about"} as={'div'}>
+        <Navbar.Link active={currentLocation === "/about"} as={"div"}>
           <Link to={"/about"}>About</Link>
         </Navbar.Link>
-        <Navbar.Link active={currentLocation === "/project"} as={'div'}>
+        <Navbar.Link active={currentLocation === "/project"} as={"div"}>
           <Link to={"/project"}>Project</Link>
         </Navbar.Link>
       </Navbar.Collapse>
