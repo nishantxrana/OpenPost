@@ -37,7 +37,7 @@ function Header() {
         <AiOutlineSearch />
       </Button>
       <div className="flex justify-center items-center gap-2 md:order-2">
-        <Button className="  w-12 h-10  hidden md:inline" color={"gray"} pill onClick={()=>dispatch(toggleTheme())}>
+        <Button className="  w-12 h-10 " color={"gray"} pill onClick={()=>dispatch(toggleTheme())}>
           {theme === "light" ? <FaSun/> : <FaMoon/>}
         </Button>
         {currentUser ? (
@@ -53,7 +53,7 @@ function Header() {
             </Dropdown.Header>
             {/* <Dropdown.Divider/> */}
             <Dropdown.Item>
-              <Link to={"/dashboard?tab/profile"}>Profile</Link>
+              <Link to={"/dashboard?tab=profile"}>Profile</Link>
             </Dropdown.Item>
             <Dropdown.Divider/>
             <Dropdown.Item>

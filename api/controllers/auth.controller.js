@@ -20,11 +20,11 @@ export const signup = async (req, res, next) => {
   }
 
   //checking if user already exists
-  // const existingUser = await User.findOne({$or: [{username}, {email}]}); //TODO: this is just a abstraction try catch will also do that
+  const existingUser = await User.findOne({$or: [{username}, {email}]}); //TODO: this is just a abstraction try catch will also do that
 
-  // if(existingUser){
-  //     return res.status(400).json({message: "User already exists"});
-  // }
+  if(existingUser){
+      return res.status(400).json({success:false, message: "User already exists"});
+  }
 
   //simple hasshing
   const hashedPassword = await bcryptjs.hash(password, 10);

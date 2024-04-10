@@ -4,8 +4,8 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 
 function PrivateMask() {
-    const {theme} = useSelector((state)=> state.user)
-  return theme ? <Outlet/> : <Navigate to='signin'/>
+    const {currentUser} = useSelector((state)=> state.user)
+  return currentUser ? <Outlet/> : <Navigate to='signin'/>
 }
 
 export default PrivateMask

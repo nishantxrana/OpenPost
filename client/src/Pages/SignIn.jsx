@@ -49,7 +49,7 @@ function SignIn() {
 
   return (
     <div className=" min-h-screen">
-      <div className="  mt-20 max-w-3xl mx-auto px-20 md:px-5 flex flex-col md:flex-row gap-20 justify-center items-center ">
+      <div className="  mt-20 max-w-3xl mx-auto px-16 md:px-5 flex flex-col md:flex-row gap-20 justify-center items-center ">
         {/* left */}
         <div className=" flex-1 flex flex-col items-center md:items-start">
           <Link to={"/"} className=" text-4xl text-black font-bold">
