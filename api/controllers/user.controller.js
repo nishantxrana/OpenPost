@@ -18,8 +18,13 @@ export const updateInfo = async (req, res, next) => {
       return next(errorDisplay(400, "password must be at least 5 characters"));
     }
     req.body.password = await bcryptjs.hash(req.body.password, 10);
+  } else {
+    delete req.body.password;
   }
   if (req.body.username) {
+    if (req.body.username === "") {
+      return next(errorDisplay(400, "username must be at least 4 characters"));
+    }
     if (req.body.username.length < 4) {
       return next(errorDisplay(400, "username must be at least 4 characters"));
     }
@@ -39,6 +44,8 @@ export const updateInfo = async (req, res, next) => {
     if (req.body.username !== req.body.username.toLowerCase()) {
       return next(errorDisplay(400, "username cannot contain capital letters"));
     }
+  } else {
+    delete req.body.username;
   }
 
   try {
@@ -47,14 +54,26 @@ export const updateInfo = async (req, res, next) => {
       {
         $set: {
           username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
+          password: await req.body.password,
+          profilePic: await req.body.profilePic,
         },
       },
       { new: true }
     );
     const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  if (req.params.userId !== req.user.id) {
+    return next(errorDisplay(400, "your are not allowed to delete this user"));
+  }
+  try {
+    await User.findByIdAndDelete(req.params.userId);
+    res.status(200).json({ message: "user deleted successfully" });
   } catch (error) {
     next(error);
   }

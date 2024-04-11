@@ -12,6 +12,7 @@ function Header() {
   const dispatch = useDispatch()
   const currentLocation = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
+  // console.log(currentUser);
 
   return (
     <Navbar className=" border-b-2">

@@ -23,10 +23,23 @@ const signinSlice = createSlice({
         loginError: (state, action) => {
             state.loading = false
             state.error = action.payload
+        },
+        updateStart: (state) => {
+            state.loading = true
+            state.error = null
+        },
+        updateSuccess: (state, action) => {
+            state.loading = false
+            state.currentUser.rest = action.payload
+            state.error = null
+        },
+        updateError: (state, action) => {
+            state.loading = false
+            state.error = action.payload
         }
     }
 })
 
-export const {startLogin,login,loginError} = signinSlice.actions
+ export const {startLogin,login,loginError,updateStart,updateSuccess,updateError} = signinSlice.actions;
 
 export default signinSlice.reducer

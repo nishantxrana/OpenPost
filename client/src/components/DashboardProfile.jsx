@@ -1,4 +1,4 @@
-import { Alert, Button, TextInput } from "flowbite-react";
+import { Alert, Button, Spinner, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -10,17 +10,85 @@ import {
 import { app } from "../firebase.js";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useDispatch } from "react-redux";
+import {
+  updateError,
+  updateStart,
+  updateSuccess,
+} from "../app/user/userSlice.js";
 
 function DashboardProfile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, error } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const fileUplaodComponentRef = useRef();
+  const dispatch = useDispatch();
   const [fileUploadProgress, setFileUploadProgress] = useState(null);
-  const [fileUploadError, setFileUploadError] = useState(null);
+  const [fileUploadError, setFileUploadError] = useState("");
+  const [formData, setFormData] = useState({});
+  const [successMessage, setsuccessMessage] = useState(null);
+  const [errorMessage, seterrorMessage] = useState(null);
+  const [imageUploading, setImageUploading] = useState(true)
+
+  // changing form data
+  const handleChange = (event) => {
+    setFormData({ ...formData, [event.target.id]: event.target.value });
+    seterrorMessage(null);
+    setsuccessMessage(null);
+  };
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    if (Object.keys(formData).length === 0) {
+      seterrorMessage("No changes were made");
+      setTimeout(() => {
+        seterrorMessage(null);
+      }, 3000);
+      return;
+    }
+    const hasChanges = Object.values(formData).some((value) => value !== "");
+
+    if (!hasChanges) {
+      seterrorMessage("all feilds are missing");
+      setTimeout(() => {
+        seterrorMessage(null);
+      }, 3000);
+      return;
+    }
+    try {
+      const data = await fetch(`/api/users/update/${currentUser.rest._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const res = await data.json();
+      if (!data.ok) {
+        seterrorMessage(res.message);
+        setTimeout(() => {
+          seterrorMessage(null);
+        }, 3000);
+        dispatch(updateError(res.message));
+      } else {
+        // console.log(formData);
+        setsuccessMessage("update successfully");
+        setTimeout(() => {
+          setsuccessMessage(null);
+        }, 3000);
+        dispatch(updateSuccess(res));
+      }
+    } catch (error) {
+      seterrorMessage(error.message);
+      setTimeout(() => {
+        seterrorMessage(null);
+      }, 3000);
+      dispatch(updateError(error.message));
+    }
+  };
 
   // create a component that will be used to display the image file and set the image file url
   const handleImageUpload = async (event) => {
+    
     const file = event.target.files[0];
     if (file) {
       setImageFile(file);
@@ -32,12 +100,12 @@ function DashboardProfile() {
   // uploading on firebase
   const uploadImageToFirebase = async (event) => {
     // set errror message to null during upload
-    setFileUploadError(null);
     // set progress to 0 during upload
     setFileUploadProgress(null);
-
+    
     const firebaseStorage = getStorage(app);
     if (imageFile) {
+      setImageUploading(false);
       const imageName = new Date().getTime() + imageFile.name;
       const imageRef = ref(firebaseStorage, imageName);
       const uploadTask = uploadBytesResumable(imageRef, imageFile);
@@ -47,6 +115,7 @@ function DashboardProfile() {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setFileUploadProgress(progress.toFixed(0));
+          setFileUploadError(null);
         },
         (error) => {
           setFileUploadError("Image upload failed (max file size: 2Mb)");
@@ -57,6 +126,8 @@ function DashboardProfile() {
           getDownloadURL(uploadTask.snapshot.ref).then(
             (firebaseDownloadURL) => {
               setImageFileUrl(firebaseDownloadURL);
+              setImageUploading(true);
+              setFormData({ ...formData, profilePic: firebaseDownloadURL });
             }
           );
         }
@@ -66,11 +137,13 @@ function DashboardProfile() {
   useEffect(() => {
     uploadImageToFirebase();
   }, [imageFile]);
-
   return (
     <div className="flex flex-col s mx-auto mt-16 ">
       <span className=" self-center">Profile</span>
-      <form className="flex self-center flex-col gap-4 min-w-80 ">
+      <form
+        onSubmit={handleFormSubmit}
+        className="flex self-center flex-col gap-4 min-w-80 "
+      >
         <div
           className=" relative  rounded-full self-center h-32 w-32"
           onClick={() => fileUplaodComponentRef.current.click()}
@@ -103,7 +176,6 @@ function DashboardProfile() {
                   fontWeight: "bold",
                   fill: "#4574E3",
                 },
-                
               }}
             />
           )}
@@ -116,11 +188,13 @@ function DashboardProfile() {
           />
         </div>
         {fileUploadError && <Alert color={"failure"}>{fileUploadError}</Alert>}
+
         <TextInput
           type="text"
           placeholder="Username"
           defaultValue={currentUser.rest.username}
           id="username"
+          onChange={handleChange}
         />
         <TextInput
           disabled
@@ -129,15 +203,37 @@ function DashboardProfile() {
           defaultValue={currentUser.rest.email}
           id="username"
         />
-        <TextInput type="text" placeholder="Change password" id="password" />
-        <Button type="submit" gradientDuoTone="purpleToBlue">
-          Update
+        <TextInput
+          type="text"
+          placeholder="Change password"
+          id="password"
+          onChange={handleChange}
+        />
+        <Button disabled={!imageUploading} type="submit" gradientDuoTone="purpleToBlue">
+        {!imageUploading ? (
+                <>
+                  <Spinner className="mr-3" color={'warning'} size="sm" />
+                  Loading...
+                </>
+              ) : (
+                "Update"
+              )}
         </Button>
       </form>
       <div className="flex justify-between text-red-400 mt-3">
         <span>Delete Account</span>
         <span>Sign Out</span>
       </div>
+      {errorMessage && (
+        <Alert className="mt-4" color={"failure"}>
+          {errorMessage}
+        </Alert>
+      )}
+      {successMessage && (
+        <Alert className="mt-4" color={"success"}>
+          {successMessage}
+        </Alert>
+      )}
     </div>
   );
 }
