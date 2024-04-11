@@ -73,12 +73,10 @@ export const signin = async (req, res, next) => {
     //spreading the existing user to remove password from it
     const { password: pas, ...rest } = existingUser._doc;
     // if password is correct send authentication token
-    const token = jwt.sign({ id: existingUser._id }, process.env.Token_key, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign({ id: existingUser._id }, process.env.Token_key);
     res
       .status(200)
-      .cookie("login_token", token, { httpOnly: true })
+      .cookie("login_token", token, { httpOnly: true})
       .json({ rest, success: true, message: "successfully login" }); //TODO: in this we need to send cookie first
   } catch (error) {
     next(error);
@@ -92,8 +90,9 @@ export const google = async (req, res, next) => {
     if (user) {
     
       
-      const token = jwt.sign({ id: user._id }, process.env.Token_key);
-      console.log('reachin here');
+      const token = jwt.sign({ id: user._id }, process.env.Token_key,{
+        expiresIn: "1d",
+      });
       const { password, ...rest } = user._doc;
       res
         .status(200)
@@ -117,7 +116,9 @@ export const google = async (req, res, next) => {
         profilePic: photo,
       });
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.Token_key);
+      const token = jwt.sign({ id: newUser._id }, process.env.Token_key,{
+        expiresIn: "1d",
+      });
       const { password, ...rest } = newUser._doc;
       res
         .status(200)
@@ -128,3 +129,4 @@ export const google = async (req, res, next) => {
     next(error);
   }
 };
+
