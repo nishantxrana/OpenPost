@@ -1,4 +1,12 @@
-import { Alert, Button, Spinner, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -9,12 +17,16 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase.js";
 import { CircularProgressbar } from "react-circular-progressbar";
+import { CiWarning } from "react-icons/ci";
 import "react-circular-progressbar/dist/styles.css";
 import { useDispatch } from "react-redux";
 import {
   updateError,
   updateStart,
   updateSuccess,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserError,
 } from "../app/user/userSlice.js";
 
 function DashboardProfile() {
@@ -28,7 +40,8 @@ function DashboardProfile() {
   const [formData, setFormData] = useState({});
   const [successMessage, setsuccessMessage] = useState(null);
   const [errorMessage, seterrorMessage] = useState(null);
-  const [imageUploading, setImageUploading] = useState(true)
+  const [imageUploading, setImageUploading] = useState(true);
+  const [showModal, setshowModal] = useState(false);
 
   // changing form data
   const handleChange = (event) => {
@@ -55,6 +68,7 @@ function DashboardProfile() {
       return;
     }
     try {
+      dispatch(updateStart());
       const data = await fetch(`/api/users/update/${currentUser.rest._id}`, {
         method: "PUT",
         headers: {
@@ -88,7 +102,6 @@ function DashboardProfile() {
 
   // create a component that will be used to display the image file and set the image file url
   const handleImageUpload = async (event) => {
-    
     const file = event.target.files[0];
     if (file) {
       setImageFile(file);
@@ -98,11 +111,11 @@ function DashboardProfile() {
   };
 
   // uploading on firebase
-  const uploadImageToFirebase = async (event) => {
+  const uploadImageToFirebase = async () => {
     // set errror message to null during upload
     // set progress to 0 during upload
     setFileUploadProgress(null);
-    
+
     const firebaseStorage = getStorage(app);
     if (imageFile) {
       setImageUploading(false);
@@ -137,6 +150,38 @@ function DashboardProfile() {
   useEffect(() => {
     uploadImageToFirebase();
   }, [imageFile]);
+
+  const handleDeleteUser = async () => {
+    // setshowModal(false)
+
+    try {
+      dispatch(deleteUserStart());
+      const data = await fetch(`/api/users/delete/${currentUser.rest._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const res = await data.json();
+      if (!data.ok) {
+        seterrorMessage(res.message);
+        setTimeout(() => {
+          seterrorMessage(null);
+        }, 3000);
+        dispatch(deleteUserError(res.message));
+      } else {
+        dispatch(deleteUserSuccess(res));
+      }
+    } catch (error) {
+      seterrorMessage(error.message);
+      setTimeout(() => {
+        seterrorMessage(null);
+      }, 3000);
+      dispatch(deleteUserError(error.message));
+    }
+  };
+
   return (
     <div className="flex flex-col s mx-auto mt-16 ">
       <span className=" self-center">Profile</span>
@@ -209,20 +254,26 @@ function DashboardProfile() {
           id="password"
           onChange={handleChange}
         />
-        <Button disabled={!imageUploading} type="submit" gradientDuoTone="purpleToBlue">
-        {!imageUploading ? (
-                <>
-                  <Spinner className="mr-3" color={'warning'} size="sm" />
-                  Loading...
-                </>
-              ) : (
-                "Update"
-              )}
+        <Button
+          disabled={!imageUploading}
+          type="submit"
+          gradientDuoTone="purpleToBlue"
+        >
+          {!imageUploading ? (
+            <>
+              <Spinner className="mr-3" color={"warning"} size="sm" />
+              Loading...
+            </>
+          ) : (
+            "Update"
+          )}
         </Button>
       </form>
       <div className="flex justify-between text-red-400 mt-3">
-        <span>Delete Account</span>
-        <span>Sign Out</span>
+        <span className=" cursor-pointer" onClick={() => setshowModal(true)}>
+          Delete Account
+        </span>
+        <span className=" cursor-pointer">Sign Out</span>
       </div>
       {errorMessage && (
         <Alert className="mt-4" color={"failure"}>
@@ -234,6 +285,29 @@ function DashboardProfile() {
           {successMessage}
         </Alert>
       )}
+      <Modal
+        show={showModal}
+        onClose={() => setshowModal(false)}
+        popup
+        size="md"
+      >
+        <ModalHeader>Warning</ModalHeader>
+        <ModalBody className="mt-7 flex flex-col items-center">
+          <CiWarning className=" text-5xl text-gray-500 mb-6" />
+          <span className="">
+            Are you sure you want to{" "}
+            <span className=" text-red-400">delete</span> your account?
+          </span>
+        </ModalBody>
+        <div className="flex justify-center gap-16 mt-4 mb-4">
+          <Button color={"failure"} onClick={handleDeleteUser}>
+            <span>Delete</span>
+          </Button>
+          <Button onClick={() => setshowModal(false)} color={"dark"}>
+            <span>Cancel</span>
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }
