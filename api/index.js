@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import userRoutes from './routes/user.route.js';
 import auth from './routes/auth.route.js';
 import cookieParser from 'cookie-parser'
+import postRoute from './routes/post.route.js';
 // import { env } from 'process'; // can use this to env.mongoKey
 
 dotenv.config()
@@ -24,6 +25,7 @@ app.use(cookieParser()); //FIXME: always define middleware before using it (befo
 
 app.use('/api/users',userRoutes)
 app.use('/api/auth',auth)
+app.use('/api/post',postRoute)
 
 app.listen(port,()=>{
     console.log(`listening on ${port}`);

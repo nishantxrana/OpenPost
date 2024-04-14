@@ -17,8 +17,8 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase.js";
 import { CircularProgressbar } from "react-circular-progressbar";
-import { CiWarning } from "react-icons/ci";
 import "react-circular-progressbar/dist/styles.css";
+import { CiWarning } from "react-icons/ci";
 import { useDispatch } from "react-redux";
 import {
   updateError,

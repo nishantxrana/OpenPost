@@ -21,9 +21,9 @@ const userSchema = new mongoose.Schema(
       default:
         "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/330px-SpongeBob_SquarePants_character.svg.png",
     },
-    isAdmin:{
+    isAdmin: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   { timestamps: true }
