@@ -7,6 +7,8 @@ import SignUp from "./Pages/SignUp";
 import Dashboard from "./Pages/Dashboard";
 import Header from "./components/Header";
 import PrivateMask from "./components/PrivateMask";
+import AdminOnlyPrivateMask from "./components/AdminOnlyPrivateMask";
+import CreatePost from "./Pages/CreatePost";
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route element={<PrivateMask />}>
           <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        <Route element={<AdminOnlyPrivateMask />}>
+          <Route path="/createPost" element={<CreatePost />} />
         </Route>
       </Routes>
     </BrowserRouter>

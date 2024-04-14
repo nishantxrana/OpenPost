@@ -29,6 +29,7 @@ import {
   deleteUserError,
   logout,
 } from "../app/user/userSlice.js";
+import { Link } from "react-router-dom";
 
 function DashboardProfile() {
   const { currentUser, error } = useSelector((state) => state.user);
@@ -153,7 +154,7 @@ function DashboardProfile() {
   }, [imageFile]);
 
   const handleDeleteUser = async () => {
-    setshowModal(false)
+    setshowModal(false);
 
     try {
       dispatch(deleteUserStart());
@@ -183,22 +184,21 @@ function DashboardProfile() {
     }
   };
 
-  const handleLogOut  =async () => {
-   try {
-    const data = await fetch('/api/users/logout',{
-      method: 'POST',
-    })
-    const res = await data.json()
-    if(data.ok){
-      dispatch(logout());
+  const handleLogOut = async () => {
+    try {
+      const data = await fetch("/api/users/logout", {
+        method: "POST",
+      });
+      const res = await data.json();
+      if (data.ok) {
+        dispatch(logout());
+      } else {
+        console.log(res.message);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
-    else{
-      console.log(res.message);
-    }
-   } catch (error) {
-    console.log(error.message);
-   }}
-
+  };
 
   return (
     <div className="flex flex-col s mx-auto mt-16 ">
@@ -286,12 +286,21 @@ function DashboardProfile() {
             "Update"
           )}
         </Button>
+        {currentUser.rest.isAdmin && (
+          <Link to={'/createPost'}>
+            <Button type="button" className="w-full" gradientDuoTone="purpleToBlue" outline>
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="flex justify-between text-red-400 mt-3">
         <span className=" cursor-pointer" onClick={() => setshowModal(true)}>
           Delete Account
         </span>
-        <span onClick={handleLogOut} className=" cursor-pointer">Log Out</span>
+        <span onClick={handleLogOut} className=" cursor-pointer">
+          Sign Out
+        </span>
       </div>
       {errorMessage && (
         <Alert className="mt-4" color={"failure"}>
@@ -303,12 +312,12 @@ function DashboardProfile() {
           {successMessage}
         </Alert>
       )}
-      <Modal 
+      <Modal
         show={showModal}
         onClose={() => setshowModal(false)}
         popup
         size="md"
-      > 
+      >
         <ModalHeader className=" w-full  bg-red-50">Warning</ModalHeader>
         <ModalBody className="mt-4 flex flex-col items-center">
           <CiWarning className=" text-5xl text-gray-500 mb-6" />

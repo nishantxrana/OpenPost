@@ -5,6 +5,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon,FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../app/theme/themeSlice";
+import { logout } from "../app/user/userSlice";
+
 
 
 function Header() {
@@ -12,6 +14,22 @@ function Header() {
   const dispatch = useDispatch()
   const currentLocation = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
+
+  const handleLogOut  =async () => {
+    try {
+     const data = await fetch('/api/users/logout',{
+       method: 'POST',
+     })
+     const res = await data.json()
+     if(data.ok){
+       dispatch(logout());
+     }
+     else{
+       console.log(res.message);
+     }
+    } catch (error) {
+     console.log(error.message);
+    }}
   // console.log(currentUser);
 
   return (
@@ -58,7 +76,7 @@ function Header() {
             </Dropdown.Item>
             <Dropdown.Divider/>
             <Dropdown.Item>
-              <Link to={"/dashboard?tab/profile"}>Sign Out</Link>
+              <Link to={"/dashboard?tab/profile"} onClick={handleLogOut}>Sign Out</Link>
             </Dropdown.Item>
           </Dropdown>
         ) : (

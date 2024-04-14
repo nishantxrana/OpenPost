@@ -73,7 +73,7 @@ export const signin = async (req, res, next) => {
     //spreading the existing user to remove password from it
     const { password: pas, ...rest } = existingUser._doc;
     // if password is correct send authentication token
-    const token = jwt.sign({ id: existingUser._id }, process.env.Token_key);
+    const token = jwt.sign({ id: existingUser._id, isAdmin: existingUser.isAdmin }, process.env.Token_key);
     res
       .status(200)
       .cookie("login_token", token, { httpOnly: true})
@@ -90,7 +90,7 @@ export const google = async (req, res, next) => {
     if (user) {
     
       
-      const token = jwt.sign({ id: user._id }, process.env.Token_key,{
+      const token = jwt.sign({ id: user._id ,isAdmin: user.isAdmin}, process.env.Token_key,{
         expiresIn: "1d",
       });
       const { password, ...rest } = user._doc;
@@ -116,7 +116,7 @@ export const google = async (req, res, next) => {
         profilePic: photo,
       });
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.Token_key,{
+      const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.Token_key,{
         expiresIn: "1d",
       });
       const { password, ...rest } = newUser._doc;
