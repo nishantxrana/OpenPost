@@ -27,6 +27,7 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserError,
+  logout,
 } from "../app/user/userSlice.js";
 
 function DashboardProfile() {
@@ -152,7 +153,7 @@ function DashboardProfile() {
   }, [imageFile]);
 
   const handleDeleteUser = async () => {
-    // setshowModal(false)
+    setshowModal(false)
 
     try {
       dispatch(deleteUserStart());
@@ -181,6 +182,23 @@ function DashboardProfile() {
       dispatch(deleteUserError(error.message));
     }
   };
+
+  const handleLogOut  =async () => {
+   try {
+    const data = await fetch('/api/users/logout',{
+      method: 'POST',
+    })
+    const res = await data.json()
+    if(data.ok){
+      dispatch(logout());
+    }
+    else{
+      console.log(res.message);
+    }
+   } catch (error) {
+    console.log(error.message);
+   }}
+
 
   return (
     <div className="flex flex-col s mx-auto mt-16 ">
@@ -273,7 +291,7 @@ function DashboardProfile() {
         <span className=" cursor-pointer" onClick={() => setshowModal(true)}>
           Delete Account
         </span>
-        <span className=" cursor-pointer">Sign Out</span>
+        <span onClick={handleLogOut} className=" cursor-pointer">Log Out</span>
       </div>
       {errorMessage && (
         <Alert className="mt-4" color={"failure"}>
@@ -285,16 +303,16 @@ function DashboardProfile() {
           {successMessage}
         </Alert>
       )}
-      <Modal
+      <Modal 
         show={showModal}
         onClose={() => setshowModal(false)}
         popup
         size="md"
-      >
-        <ModalHeader>Warning</ModalHeader>
-        <ModalBody className="mt-7 flex flex-col items-center">
+      > 
+        <ModalHeader className=" w-full  bg-red-50">Warning</ModalHeader>
+        <ModalBody className="mt-4 flex flex-col items-center">
           <CiWarning className=" text-5xl text-gray-500 mb-6" />
-          <span className="">
+          <span className=" text-center">
             Are you sure you want to{" "}
             <span className=" text-red-400">delete</span> your account?
           </span>

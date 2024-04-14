@@ -49,10 +49,15 @@ const signinSlice = createSlice({
         deleteUserError: (state, action) => {
             state.loading = false
             state.error = action.payload
+        },
+        logout: (state) => {
+            state.loading = false
+            state.error = null
+            state.currentUser = null
         }
     }
 })
 
- export const {startLogin,login,loginError,updateStart,updateSuccess,updateError,deleteUserStart,deleteUserSuccess,deleteUserError} = signinSlice.actions;
+ export const {startLogin,login,loginError,updateStart,updateSuccess,updateError,deleteUserStart,deleteUserSuccess,deleteUserError,logout} = signinSlice.actions;
 
 export default signinSlice.reducer

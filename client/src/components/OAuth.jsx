@@ -49,7 +49,7 @@ function OAuth() {
   return (
     <Button type='button' color='light' onClick={handleGoogleSignin}>
         <FcGoogle className=' w-6 h-6 mr-3'/>
-        <span>Login with Google</span>
+        <span>Continue with Google</span>
     </Button>
   )
 }
