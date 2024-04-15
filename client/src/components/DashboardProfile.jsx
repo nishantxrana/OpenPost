@@ -71,7 +71,7 @@ function DashboardProfile() {
     }
     try {
       dispatch(updateStart());
-      const data = await fetch(`/api/users/update/${currentUser.rest._id}`, {
+      const data = await fetch(`/api/users/update/${currentUser._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -158,7 +158,7 @@ function DashboardProfile() {
 
     try {
       dispatch(deleteUserStart());
-      const data = await fetch(`/api/users/delete/${currentUser.rest._id}`, {
+      const data = await fetch(`/api/users/delete/${currentUser._id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -246,7 +246,7 @@ function DashboardProfile() {
             className={`mx-auto cursor-pointer object-cover w-full h-full rounded-full border-gray-400 border-4 {${
               fileUploadProgress < 100 && " opacity-80"
             }`}
-            src={imageFileUrl || currentUser.rest.profilePic}
+            src={imageFileUrl || currentUser.profilePic}
             alt="user"
           />
         </div>
@@ -255,7 +255,7 @@ function DashboardProfile() {
         <TextInput
           type="text"
           placeholder="Username"
-          defaultValue={currentUser.rest.username}
+          defaultValue={currentUser.username}
           id="username"
           onChange={handleChange}
         />
@@ -263,7 +263,7 @@ function DashboardProfile() {
           disabled
           type="email"
           placeholder="email"
-          defaultValue={currentUser.rest.email}
+          defaultValue={currentUser.email}
           id="username"
         />
         <TextInput
@@ -286,9 +286,14 @@ function DashboardProfile() {
             "Update"
           )}
         </Button>
-        {currentUser.rest.isAdmin && (
-          <Link to={'/createPost'}>
-            <Button type="button" className="w-full" gradientDuoTone="purpleToBlue" outline>
+        {currentUser.isAdmin && (
+          <Link to={"/createPost"}>
+            <Button
+              type="button"
+              className="w-full"
+              gradientDuoTone="purpleToBlue"
+              outline
+            >
               Create a post
             </Button>
           </Link>

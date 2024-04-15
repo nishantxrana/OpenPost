@@ -77,7 +77,7 @@ export const signin = async (req, res, next) => {
     res
       .status(200)
       .cookie("login_token", token, { httpOnly: true})
-      .json({ rest}); //TODO: in this we need to send cookie first
+      .json({ ...rest}); //TODO: in this we need to send cookie first
   } catch (error) {
     next(error);
   }
@@ -97,7 +97,7 @@ export const google = async (req, res, next) => {
       res
         .status(200)
         .cookie("login_token", token, { httpOnly: true })
-        .json({ rest }); //TODO: in this we need to send cookie first
+        .json({ ...rest }); //TODO: in this we need to send cookie first
         
     } 
     // if user does not exist

@@ -63,12 +63,12 @@ function Header() {
           <Dropdown
             arrowIcon={false}
             inline
-            label={<Avatar img={currentUser.rest.profilePic} rounded />}
+            label={<Avatar img={currentUser.profilePic} rounded />}
           >
             <Dropdown.Header>
-             <span className="block mb-1"><span className=" font-semibold mr-1">User:</span>{currentUser.rest.username}</span>
+             <span className="block mb-1"><span className=" font-semibold mr-1">User:</span>{currentUser.username}</span>
             
-             <span className="block"><span className=" font-semibold mr-1">Mail:</span>{currentUser.rest.email}</span>
+             <span className="block"><span className=" font-semibold mr-1">Mail:</span>{currentUser.email}</span>
             </Dropdown.Header>
             {/* <Dropdown.Divider/> */}
             <Dropdown.Item>

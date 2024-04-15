@@ -1,9 +1,10 @@
 import express from 'express'
-import { createPost } from '../controllers/post.controller.js';
+import { createPost, getPosts } from '../controllers/post.controller.js';
 import { userTokenverification } from '../../utils/userVerification.js';
 
 const postRoute = express.Router()
 
-postRoute.use('/createPost',userTokenverification,createPost );
+postRoute.post('/createPost',userTokenverification,createPost );
+postRoute.get('/getPosts',getPosts);
 
 export default postRoute;
