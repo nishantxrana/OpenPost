@@ -6,7 +6,7 @@ import {
     Spinner,
     TextInput,
   } from "flowbite-react";
-  import React, { useRef, useState } from "react";
+  import React, { useEffect, useRef, useState } from "react";
   import { Editor } from "@tinymce/tinymce-react";
   import {
     getStorage,
@@ -15,24 +15,47 @@ import {
     uploadBytesResumable,
   } from "firebase/storage";
   import { app } from "../firebase.js";
-  import {useNavigate} from 'react-router-dom'
+  import {useNavigate,useParams} from 'react-router-dom'
+  import {useSelector} from 'react-redux'
   
-  function CreatePost() {
+  
+  function UpdatePost() {
     const [imageUploadError, setImageUploadError] = useState(null);
     const [imageFile, setImageFile] = useState(null);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({title:'',content:'',category:''});
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [publishError, setPublishError] = useState(null)
     const editorRef = useRef(null);
     const navigate = useNavigate();
+    const {postId} = useParams()
+    const {currentUser} = useSelector(state => state.user)
     const log = () => {
       if (editorRef.current) {
         // console.log(editorRef.current.getContent());
         setFormData({ ...formData, content: editorRef.current.getContent() });
       }
     };
-  
-    //
+    // console.log(formData);
+    useEffect(() => {
+      const fetchPostData = async () => {
+        try{const res = await fetch(`/api/post/getposts?postId=${postId}&userId=${currentUser._id}`)
+        const data = await res.json();
+        if(!res.ok){
+          setPublishError(data.message);
+          return;
+        }else{
+            setFormData(data.posts[0])
+        }}
+    
+    catch(error){
+        setPublishError(error.message)
+    }
+}
+    fetchPostData();
+      
+    }, [postId])
+    
+    
     const handleImageUpload = async (e) => {
       try {
         if (!imageFile) {
@@ -74,8 +97,8 @@ import {
     const handleDataSubmit = async (event) => {
       event.preventDefault();
       try {
-        const res = await fetch("/api/post/createPost", {
-          method: "POST",
+        const res = await fetch(`/api/post/updatepost?userId=${currentUser._id}&postId=${formData._id}`, {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -85,6 +108,8 @@ import {
   
         if (res.ok) {
           setPublishError(null)
+          // console.log(data);
+          // console.log(data.slug);
           navigate(`/post/${data.slug}`)
   
         }
@@ -95,7 +120,7 @@ import {
     return (
       <div className=" h-screen">
         <h1 className=" text-center text-3xl mt-5 font-semibold text-gray-600">
-          Create Post
+          Update Post
         </h1>
         <form className=" mx-auto max-w-3xl flex justify-center flex-col mt-10 gap-4 px-5">
           <div className="flex flex-col sm:flex-row flex-1 gap-4">
@@ -107,8 +132,10 @@ import {
               onChange={(event) =>
                 setFormData({ ...formData, title: event.target.value })
               }
+              value={formData.title}
             />
             <Select
+            value={formData.category}
               onChange={(event) =>
                 setFormData({ ...formData, category: event.target.value })
               }
@@ -153,6 +180,7 @@ import {
             <Alert color={"failure"}>{imageUploadError}</Alert>
           )}
           <Editor
+            initialValue={formData.content}
             onChange={log}
             apiKey="q878nwk9myxanu80k0bo1s13ap6w4wa9dso3rzciguq1de25"
             onInit={(evt, editor) => (editorRef.current = editor)}
@@ -220,7 +248,7 @@ import {
             }}
           />
           <Button className="mb-10" color={"dark"} onClick={handleDataSubmit}>
-            Publish
+            Update
           </Button>
           {publishError && (
             <Alert color={"failure"}>{publishError}</Alert>
@@ -230,5 +258,5 @@ import {
     );
   }
   
-  export default CreatePost;
+  export default UpdatePost;
   

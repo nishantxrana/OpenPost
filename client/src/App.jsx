@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import PrivateMask from "./components/PrivateMask";
 import AdminOnlyPrivateMask from "./components/AdminOnlyPrivateMask";
 import CreatePost from "./Pages/CreatePost";
+import UpdatePost from "./Pages/UpdatePost";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route element={<PrivateMask />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/updatepost/:postId" element={<UpdatePost />} />
         </Route>
         <Route element={<AdminOnlyPrivateMask />}>
           <Route path="/createPost" element={<CreatePost />} />

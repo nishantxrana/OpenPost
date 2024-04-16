@@ -139,7 +139,7 @@ function DashboardPosts() {
                 </Table.Cell>
                 <Table.Cell>{post.category}</Table.Cell>
                 <Table.Cell>
-                  <Link to={`/updatepost/${post.slug}`}>
+                  <Link to={`/updatepost/${post._id}`}>
                     <span className=" hover:underline text-teal-400">Edit</span>
                   </Link>
                 </Table.Cell>

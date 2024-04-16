@@ -71,13 +71,11 @@ export const getposts = async (req, res, next) => {
     const postsOneMonthAgo = await Post.countDocuments({
       createdAt: { $gte: timeOneMonthAgo },
     });
-    res.status(200).json(
-      {
-        posts,
-        totalPosts,
-        postsOneMonthAgo,
-      }
-    );
+    res.status(200).json({
+      posts,
+      totalPosts,
+      postsOneMonthAgo,
+    });
   } catch (error) {
     next(error);
   }
@@ -93,5 +91,27 @@ export const deletepost = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
 
-}
+export const updatepost = async (req, res, next) => {
+  if (!req.user.isAdmin && req.user.id != req.query.userId) {
+    return next(errorDisplay(400, "you are not allowed to update post"));
+  }
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.query.postId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          image: req.body.image,
+          category: req.body.category,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    next(error);
+  }
+};
