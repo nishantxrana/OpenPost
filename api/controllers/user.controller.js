@@ -79,10 +79,48 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const logOut =  (req, res, next) => {
+export const logOut = (req, res, next) => {
   try {
     res.clearCookie("login_token");
     res.status(200).json({ success: true, message: "successfully Logged Out" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUsers = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(
+      errorDisplay(400, "you are not allowed to access users database")
+    );
+  }
+  try {
+    const startIndex = req.query.startIndex || 0;
+    const limit = req.query.limit || 10;
+    const sortOrder = req.query.sortOrder === "asc" ? 1 : -1;
+    const users = await User.find({})
+      .sort({ updatedAt: sortOrder })
+      .skip(startIndex)
+      .limit(limit);
+
+      const totalUsers = await User.countDocuments();
+
+      const now = new Date();
+      const oneMonthago = new Date(
+        now.getFullYear(),
+        now.getMonth() - 1,
+        now.getDate()
+      )
+
+      const usersOneMonthago = await User.countDocuments({
+        createdAt: { $gte: oneMonthago },
+      });
+      
+      res.status(200).json({
+        users,
+        totalUsers,
+        usersOneMonthago,
+      });
   } catch (error) {
     next(error);
   }
