@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Sidebar } from "flowbite-react";
 import { PiSignOut } from "react-icons/pi";
-import { HiUser } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../app/user/userSlice";
-import { BsFileEarmarkPost } from "react-icons/bs";
+import { BsPostcard } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
 
 function DashboardSidebar() {
   const location = useLocation();
@@ -45,21 +46,34 @@ function DashboardSidebar() {
                 active={tab === "profile"}
                 label={currentUser.isAdmin ? "Admin" : "user"}
                 labelColor="dark"
-                icon={HiUser}
+                icon={CgProfile}
                 as="div"
               >
                 Profile
               </Sidebar.Item>
             </Link>
-            <Link to={"/dashboard?tab=posts"}>
+            {currentUser.isAdmin && (
+              <Link to={"/dashboard?tab=posts"}>
               <Sidebar.Item
-                icon={BsFileEarmarkPost}
+                icon={BsPostcard}
                 active={tab === "posts"}
                 as="div"
               >
                 Posts
               </Sidebar.Item>
             </Link>
+            )}
+            {currentUser.isAdmin && (
+              <Link to={"/dashboard?tab=users"}>
+              <Sidebar.Item
+                icon={FaUsers}
+                active={tab === "users"}
+                as="div"
+              >
+                Users
+              </Sidebar.Item>
+            </Link>
+            )}
             <Sidebar.Item
               className="cursor-pointer"
               icon={PiSignOut}

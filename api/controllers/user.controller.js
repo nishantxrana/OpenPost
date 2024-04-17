@@ -68,7 +68,7 @@ export const updateInfo = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if (req.params.userId !== req.user.id) {
+  if (!req.user.isAdmin && req.params.userId !== req.user.id) {
     return next(errorDisplay(400, "your are not allowed to delete this user"));
   }
   try {
@@ -103,6 +103,11 @@ export const getUsers = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
+      const userWithoutPassword = users.map(user => {
+        const { password,...rest } = user._doc;
+        return rest;
+      })
+
       const totalUsers = await User.countDocuments();
 
       const now = new Date();
@@ -117,7 +122,7 @@ export const getUsers = async (req, res, next) => {
       });
       
       res.status(200).json({
-        users,
+        users:userWithoutPassword,
         totalUsers,
         usersOneMonthago,
       });
