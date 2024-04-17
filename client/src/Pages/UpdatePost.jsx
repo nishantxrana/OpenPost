@@ -29,6 +29,7 @@ import {
     const navigate = useNavigate();
     const {postId} = useParams()
     const {currentUser} = useSelector(state => state.user)
+    const [initialEditorContent, setInitialEditorContent] = useState(null)
     const log = () => {
       if (editorRef.current) {
         // console.log(editorRef.current.getContent());
@@ -45,6 +46,7 @@ import {
           return;
         }else{
             setFormData(data.posts[0])
+            setInitialEditorContent(data.posts[0].content)
         }}
     
     catch(error){
@@ -180,7 +182,7 @@ import {
             <Alert color={"failure"}>{imageUploadError}</Alert>
           )}
           <Editor
-            initialValue={formData.content}
+            initialValue={initialEditorContent}
             onChange={log}
             apiKey="q878nwk9myxanu80k0bo1s13ap6w4wa9dso3rzciguq1de25"
             onInit={(evt, editor) => (editorRef.current = editor)}

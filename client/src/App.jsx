@@ -10,6 +10,7 @@ import PrivateMask from "./components/PrivateMask";
 import AdminOnlyPrivateMask from "./components/AdminOnlyPrivateMask";
 import CreatePost from "./Pages/CreatePost";
 import UpdatePost from "./Pages/UpdatePost";
+import PostPage from "./Pages/PostPage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route element={<AdminOnlyPrivateMask />}>
           <Route path="/createPost" element={<CreatePost />} />
         </Route>
+        <Route path="/post/:slug" element={<PostPage />} />
       </Routes>
     </BrowserRouter>
   );
