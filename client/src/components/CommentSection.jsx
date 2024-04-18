@@ -92,12 +92,31 @@ function AddComment({ postId }) {
     }
   };
 
+  const handleCommentDelete = async (commentId) => {
+    if (!currentUser) {
+      navigate("/signin");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+          method: "DELETE",
+        })
+      if (res.ok) {
+        setComments(
+          comments.filter((comment) => comment._id!== commentId)
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {currentUser ? (
         <>
           <form
-            className={` w-full mb-4 mt-6 pb-10 border-b max-w-2xl ${
+            className={` w-full mb-1 mt-6 pb-10 border-b max-w-2xl ${
               successMessage
                 ? "border-b-green-400 border-b-2"
                 : "border-b-gray-400"
@@ -157,15 +176,20 @@ function AddComment({ postId }) {
               </Alert>
             )}
           </form>
+          <div className="w-full mb-3 pl-3"><span className="font-semibold">{comments && comments.length}</span><span className="ml-1 ">Comments</span></div>
         </>
       ) : (
-        "login toh kr lay"
+        <span>
+          <Link to={"/signin"} className="text-teal-300 italic textxs">
+            Sign in
+          </Link>{" "}
+          to interact with comments
+        </span>
       )}
-      {comments
-        ? comments.map((com) => (
-            <Comment key={com._id} com={com} onLike={handleCommentLikes} />
-          ))
-        : "no comments"}
+      {comments &&
+        comments.map((com) => (
+          <Comment key={com._id} com={com} onLike={handleCommentLikes} deleteComment={handleCommentDelete} />
+        ))}
     </>
   );
 }

@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js";
 import Comment from "../models/comment.model.js";
+import { errorDisplay } from "../../utils/error.js";
 
 export const create = async (req, res, next) => {
   const { userId, postId, content } = await req.body;
@@ -53,6 +54,25 @@ export const commentLikeInfo = async (req, res, next) => {
     }
     await comment.save();
     res.status(200).json(comment);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteComment = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    if (!comment) {
+      return next(errorDisplay(400, "comment not found"));
+    }
+    if (comment.userId === req.user.id || req.user.isAdmin) {
+      await Comment.findByIdAndDelete(req.params.commentId);
+      res.status(200).json({ message: "comment deleted successfully" });
+    } else {
+      return next(
+        errorDisplay(400, "you are not allowed to delete this comment")
+      );
+    }
   } catch (error) {
     next(error);
   }
