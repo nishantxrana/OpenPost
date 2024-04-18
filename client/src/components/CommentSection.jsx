@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Alert, Button, Textarea } from "flowbite-react";
 import Comment from "./Comment";
 
@@ -8,8 +8,9 @@ function AddComment({ postId }) {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);//kdkd
+  const [successMessage, setSuccessMessage] = useState(null); //kdkd
   const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +31,7 @@ function AddComment({ postId }) {
       if (res.ok) {
         setComment("");
         setCommentError(null);
-        setComments([data,...comments])
+        setComments([data, ...comments]);
         setSuccessMessage("comment added");
         setTimeout(() => {
           setSuccessMessage(null);
@@ -46,7 +47,6 @@ function AddComment({ postId }) {
       }
     } catch (error) {
       setCommentError(error.message);
-      
     }
   };
 
@@ -68,13 +68,41 @@ function AddComment({ postId }) {
     getPostComments();
   }, [postId]);
 
- 
+  const handleCommentLikes = async (commentId) => {
+    if (!currentUser) {
+      navigate("/signin");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/comment/commentLikeInfo/${commentId}`, {
+          method: "PUT",
+        }),
+        data = await res.json();
+      if (res.ok) {
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? { ...comment, like: data.like, likeCount: data.likeCount }
+              : comment
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       {currentUser ? (
         <>
-          <form className={` w-full mb-4 mt-6 pb-10 border-b max-w-2xl ${successMessage ? 'border-b-green-400 border-b-2':'border-b-gray-400'}`}>
+          <form
+            className={` w-full mb-4 mt-6 pb-10 border-b max-w-2xl ${
+              successMessage
+                ? "border-b-green-400 border-b-2"
+                : "border-b-gray-400"
+            }`}
+          >
             <div className="flex w-full items-center gap-1 text-xs">
               <span>Signed in as:</span>
               <img
@@ -96,26 +124,23 @@ function AddComment({ postId }) {
             />
             <div className="flex justify-between items-center mt-3 px-4">
               <span className="text-xs text-gray-500">
-                {comment ? (200 - comment.length):200} characters remaining
+                {comment ? 200 - comment.length : 200} characters remaining
               </span>
               <div className="flex gap-3">
                 <Button
-                type="button"
+                  type="button"
                   pill
-                  onClick={()=>setComment("")}
+                  onClick={() => setComment("")}
                   size={"xs"}
-                  color={'gray'}
+                  color={"gray"}
                   className="w-20"
-                  disabled={comment ? false: true}
-
-
-                  
+                  disabled={comment ? false : true}
                 >
                   Cancel
                 </Button>
                 <Button
                   pill
-                  disabled={comment ? false: true}
+                  disabled={comment ? false : true}
                   onClick={handleSubmit}
                   size={"xs"}
                   outline
@@ -131,17 +156,16 @@ function AddComment({ postId }) {
                 {commentError}
               </Alert>
             )}
-            
           </form>
         </>
       ) : (
         "login toh kr lay"
       )}
-      {comments ? (
-        comments.map((com)=>(
-          <Comment key={com._id} com={com} />
-        ))
-      ):('no comments')}
+      {comments
+        ? comments.map((com) => (
+            <Comment key={com._id} com={com} onLike={handleCommentLikes} />
+          ))
+        : "no comments"}
     </>
   );
 }
