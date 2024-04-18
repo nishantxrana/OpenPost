@@ -103,34 +103,41 @@ export const getUsers = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
-      const userWithoutPassword = users.map(user => {
-        const { password,...rest } = user._doc;
-        return rest;
-      })
+    const userWithoutPassword = users.map((user) => {
+      const { password, ...rest } = user._doc;
+      return rest;
+    });
 
-      const totalUsers = await User.countDocuments();
+    const totalUsers = await User.countDocuments();
 
-      const now = new Date();
-      const oneMonthago = new Date(
-        now.getFullYear(),
-        now.getMonth() - 1,
-        now.getDate()
-      )
+    const now = new Date();
+    const oneMonthago = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
 
-      const usersOneMonthago = await User.countDocuments({
-        createdAt: { $gte: oneMonthago },
-      });
-      
-      res.status(200).json({
-        users:userWithoutPassword,
-        totalUsers,
-        usersOneMonthago,
-      });
+    const usersOneMonthago = await User.countDocuments({
+      createdAt: { $gte: oneMonthago },
+    });
+
+    res.status(200).json({
+      users: userWithoutPassword,
+      totalUsers,
+      usersOneMonthago,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-export const getUserDetails = (req, res, next) => {
-
-}
+export const getUserDetails = async (req, res, next) => {
+  
+  try {
+    const user = await User.findById(req.params.userId);
+    const { password, email, ...rest } = user._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(errorDisplay(200,'user not found'));
+  }
+};
