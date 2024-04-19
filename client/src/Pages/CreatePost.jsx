@@ -16,6 +16,8 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase.js";
 import {useNavigate} from 'react-router-dom'
+import { useSelector } from "react-redux";
+
 
 function CreatePost() {
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -25,6 +27,8 @@ function CreatePost() {
   const [publishError, setPublishError] = useState(null)
   const editorRef = useRef(null);
   const navigate = useNavigate();
+  const { theme } = useSelector((state) => state.theme);
+
   const log = () => {
     if (editorRef.current) {
       // console.log(editorRef.current.getContent());
@@ -190,6 +194,9 @@ function CreatePost() {
             placeholder: "Start typing your amazing content here!",
             height: 400,
             menubar: false,
+            selector:'textarea',
+            skin: `${theme == 'dark' ? 'oxide-dark' : "oxide"}`,
+            content_css: `${theme}`,
             plugins: [
               "advlist",
               "autolink",
