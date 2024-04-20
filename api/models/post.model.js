@@ -18,7 +18,8 @@ const postSchema = new mongoose.Schema(
         },
         image:{
             type: String,
-            default: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/330px-SpongeBob_SquarePants_character.svg.png",
+            default: "https://bernardmarr.com/wp-content/uploads/2022/04/The-10-Biggest-Technology-Trends-That-Will-Transform-The-Next-Decade-800x534.jpg",
+           
         },
         category:{
             type: String,

@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
     profilePic: {
       type: String,
       default:
-        "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/330px-SpongeBob_SquarePants_character.svg.png",
+        "https://thumbs.dreamstime.com/b/default-placeholder-profile-icon-avatar-gray-man-90197957.jpg",
     },
     isAdmin: {
       type: Boolean,

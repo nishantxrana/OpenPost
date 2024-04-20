@@ -60,7 +60,7 @@ function Comment({ com, onLike, deleteComment }) {
                 type="button"
                 onClick={() => onLike(com._id)}
                 className={`${
-                  currentUser && com.like.includes(currentUser._id)
+                  currentUser && com && com.like.includes(currentUser._id)
                     ? "text-blue-500"
                     : "text-gray-500"
                 } hover:text-blue-500`}

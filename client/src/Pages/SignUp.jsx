@@ -34,7 +34,7 @@ function SignUp() {
         setErrorMessage(null);
         setTimeout(() => {
           navigate('/signin')
-        }, 2000);
+        }, 1000);
       }
       setLoading(false);
     } catch (error) {

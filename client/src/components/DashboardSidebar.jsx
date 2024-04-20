@@ -7,6 +7,7 @@ import { logout } from "../app/user/userSlice";
 import { BsPostcard } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
+import { FaRegComments } from "react-icons/fa";
 
 function DashboardSidebar() {
   const location = useLocation();
@@ -71,6 +72,17 @@ function DashboardSidebar() {
                 as="div"
               >
                 Users
+              </Sidebar.Item>
+            </Link>
+            )}
+            {currentUser.isAdmin && (
+              <Link to={"/dashboard?tab=comments"}>
+              <Sidebar.Item
+                icon={FaRegComments}
+                active={tab === "comments"}
+                as="div"
+              >
+                Comments
               </Sidebar.Item>
             </Link>
             )}

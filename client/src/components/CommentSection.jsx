@@ -176,7 +176,7 @@ function AddComment({ postId }) {
               </Alert>
             )}
           </form>
-          <div className="w-full mb-3 pl-3"><span className="font-semibold">{comments && comments.length}</span><span className="ml-1 ">Comments</span></div>
+          <div className="w-full max-w-2xl mb-3 pl-3"><span className="font-semibold">{comments && comments.length}</span><span className="ml-1 ">Comments</span></div>
         </>
       ) : (
         <span>

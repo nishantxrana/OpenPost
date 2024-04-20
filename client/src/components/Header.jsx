@@ -41,22 +41,21 @@ function Header() {
         OpenPost
       </Link>
       <form>
+        <div className=" hidden sm:inline">
+
         <TextInput
           type="text"
           placeholder="Search.."
           rightIcon={AiOutlineSearch}
-          className=" hidden lg:inline"
+          className=" inline"
+          sizing={'sm'}
+          
         />
+        </div>
       </form>
-      <Button
-        className="lg:hidden w-12 h-10 flex justify-center items-center"
-        color={"gray"}
-        pill
-      >
-        <AiOutlineSearch />
-      </Button>
-      <div className="flex justify-center items-center gap-2 md:order-2">
-        <Button className="  w-12 h-10 " color={"gray"} pill onClick={()=>dispatch(toggleTheme())}>
+      
+      <div className="flex justify-center items-center gap-3 md:order-2">
+        <Button className="  w-10 h-10 " color={"gray"} pill onClick={()=>dispatch(toggleTheme())}>
           {theme === "light" ? <FaSun/> : <FaMoon/>}
         </Button>
         {currentUser ? (

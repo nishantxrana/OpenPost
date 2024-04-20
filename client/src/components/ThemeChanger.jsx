@@ -5,7 +5,7 @@ function ThemeChanger({ children }) {
     const { theme } = useSelector((state) => state.theme);
   return (
       <div className={theme}>
-      <div className=" bg-white text-black dark:bg-[#18191A] dark:text-white min-h-screen">
+      <div className=" bg-white text-black dark:bg-[#0f0f0f] dark:text-white min-h-screen">
         {children}
       </div>
     </div>

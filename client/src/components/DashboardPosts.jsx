@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CiWarning } from "react-icons/ci";
+import { MdEdit,MdDelete } from "react-icons/md";
 
 function DashboardPosts() {
   const { currentUser } = useSelector((state) => state.user);
@@ -94,9 +95,9 @@ function DashboardPosts() {
       </Alert>
       </div>
     )}
-    <div className=" flex items-center flex-col p-3 table-auto md:mx-auto overflow-x-scroll scrollbar scrollbar-track-gray-700 scrollbar-thumb-gray-500 dark:scrollbar-track-gray-500 dark:scrollbar-thumb-gray-400">
+    <div className=" flex table-auto  flex-col p-3   flex-1  overflow-x-scroll  scrollbar-track-gray-700 scrollbar-thumb-gray-500 dark:scrollbar-track-gray-500 dark:scrollbar-thumb-gray-400">
       {currentUser.isAdmin && userPosts.length > 0 ? (
-        <Table className=" shadow" hoverable>
+        <Table className=" shadow" >
           <Table.Head className="">
             <Table.HeadCell className=" whitespace-nowrap">
               Creation Time
@@ -111,13 +112,13 @@ function DashboardPosts() {
               category
             </Table.HeadCell>
             <Table.HeadCell className=" whitespace-nowrap">edit</Table.HeadCell>
-            <Table.HeadCell className=" whitespace-nowrap">
+            <Table.HeadCell className=" text-red-500 whitespace-nowrap">
               delete
             </Table.HeadCell>
           </Table.Head>
           {userPosts.map((post) => (
             <Table.Body
-              className=" divide-y border-t-2 border-t-gray-200 dark:border-t-gray-700"
+              className="divide-y border-t-2 border-t-gray-200 dark:border-t-gray-700 hover:bg-gray-50 dark:hover:bg-[#0b0b0b]"
               key={post._id}
             >
               <Table.Row>
@@ -130,23 +131,33 @@ function DashboardPosts() {
                     <img
                       src={post.image}
                       alt="post image"
-                      className="w-20 bg-gray-500 h-12 object-cover"
+                      className="w-20 rounded-md bg-gray-500 h-12 object-cover"
                     />
                   </Link>
                 </Table.Cell>
-                <Table.Cell className=" ">
+                <Table.Cell >
+                  <span className=" line-clamp-3">
+
                   <Link to={`/post/${post.slug}`}>{post.title}</Link>
+                  </span>
                 </Table.Cell>
                 <Table.Cell>{post.category}</Table.Cell>
                 <Table.Cell>
                   <Link to={`/updatepost/${post._id}`}>
-                    <span className=" hover:underline text-teal-400">Edit</span>
+                  <div
+                      className="text-gray-500 h-7 hover:bg-gray-200 hover:border dark:border-gray-800 dark:hover:bg-gray-800 w-7 transition-all duration-300 rounded-full text-xl mx-auto flex justify-center items-center hover:text-teal-400"
+                    >
+                      <MdEdit />
+                    </div>
                   </Link>
                 </Table.Cell>
                 <Table.Cell>
-                    <span onClick={()=>handleDeleteButtonClick(post._id)} className=" hover:underline hover:cursor-pointer text-red-400">
-                      Delete
-                    </span>
+                    <div
+                      onClick={()=>handleDeleteButtonClick(post._id)}
+                      className="text-gray-500 h-7 hover:bg-gray-200 hover:border dark:border-gray-800 dark:hover:bg-gray-800 w-7 transition-all duration-300 rounded-full text-xl mx-auto flex justify-center items-center hover:text-red-500"
+                    >
+                      <MdDelete />
+                    </div>
                   
                 </Table.Cell>
               </Table.Row>

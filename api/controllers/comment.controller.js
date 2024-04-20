@@ -77,3 +77,30 @@ export const deleteComment = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllComments = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(
+      errorDisplay(400, "you are not allowed to delete this comment")
+    );
+  }
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortOrder = req.query.sortOrder === "asc" ? 1 : -1;
+    const comments = await Comment.find()
+      .skip(startIndex)
+      .limit(limit)
+      .sort({createdAt: sortOrder});
+
+      const totalComments = await Comment.countDocuments();
+      res.status(200).json(
+        {
+          comments,
+          totalComments,
+        }
+      )
+  } catch (error) {
+    next(error);
+  }
+};
