@@ -5,17 +5,17 @@ import { Link } from "react-router-dom";
 
 function PostCard({ post }) {
   return (
-    <div className=" flex h-80 group group-hover:bottom-1 relative w-80 transition-all  flex-col overflow-hidden rounded-xl bg-white dark:bg-[#18181B] bg-clip-border text-gray-700 shadow-md">
+    <div className=" flex h-80 group group-hover:bottom-1 relative w-80 transition-all duration-300 flex-col overflow-hidden rounded-xl bg-white dark:bg-[#18181B] bg-clip-border text-gray-700 shadow-md">
       <div className=" m-0 h-52 w-80 group-hover:h-40 overflow-hidden text-gray-700 bg-transparent rounded-none shadow-none bg-clip-border">
         <Link to={`/post/${post.slug}`} className="w-full">
           <img
-            className="object-cover w-full h-full bg-gray-500 transition-all duration-3000"
+            className="object-cover w-full h-full bg-gray-500 transition-all duration-300"
             src={post.image}
             alt="ui/ux review check"
           />
         </Link>
       </div>
-      <div className="p-6 pt-4 flex-1 pb-3 h-30 ">
+      <div className="p-6 pt-4 flex-1 pb-3 h-30 transition-all duration-300">
         <Link to={`/post/${post.slug}`} className="w-full">
           <span className=" line-clamp-2">
             <h4 className="block dark:text-white  font-sans text-lg antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">

@@ -97,7 +97,7 @@ function CreatePost() {
     }
   };
   return (
-    <div className=" h-screen">
+    <div className=" h-full">
       <h1 className=" text-center text-3xl mt-5 font-semibold text-gray-600">
         Create Post
       </h1>
