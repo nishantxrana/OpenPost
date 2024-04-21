@@ -3,9 +3,13 @@ import { useParams } from "react-router-dom";
 import { Button } from "flowbite-react";
 import CommentSection from "../components/CommentSection.jsx";
 import PostCard from "../components/PostCard.jsx";
+import { useLocation } from "react-router-dom";
+
 
 function PostPage() {
   const { slug } = useParams();
+  const {pathname} = useLocation();
+
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,7 +37,7 @@ function PostPage() {
     fetchPost();
   }, [slug]);
 
-  var randomNumber = Math.floor(Math.random() * 3) + 1;
+  var randomNumber = Math.floor(Math.random() * 10) + 1;
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -49,7 +53,7 @@ function PostPage() {
       }
     };
     fetchPost();
-  }, []);
+  }, [pathname]);
 
   if (loading) {
     return (
@@ -59,7 +63,7 @@ function PostPage() {
     );
   }
   return (
-    <div className="flex p-3 flex-col mx-auto max-w-6xl justify-center items-center ">
+    <div className="flex p-3 pt-16 flex-col mx-auto max-w-6xl justify-center items-center ">
       <h1 className="text-4xl font-medium font-serif pt-5 text-center">
         {post.title}
       </h1>

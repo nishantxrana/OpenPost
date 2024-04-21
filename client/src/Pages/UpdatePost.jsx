@@ -127,7 +127,7 @@ function UpdatePost() {
   };
   return (
     <div className=" h-full">
-      <h1 className=" text-center text-3xl mt-5 font-semibold text-gray-600">
+      <h1 className=" text-center text-3xl pt-20 font-semibold text-gray-500">
         Update Post
       </h1>
       <form className=" mx-auto max-w-3xl flex justify-center flex-col mt-10 gap-4 px-5">

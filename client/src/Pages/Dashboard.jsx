@@ -19,7 +19,7 @@ function Dashboard() {
   }, [location.search])
   
   return (
-    <div className='min-h-screen flex flex-col md:flex-row w-full'>
+    <div className='min-h-screen pt-14 flex flex-col md:flex-row w-full'>
     <div className=''>
       <DashboardSidebar/>
     </div>

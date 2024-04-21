@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {useDispatch,useSelector} from "react-redux"
 import {startLogin,login,loginError} from '../app/user/userSlice.js';
 import OAuth from "../components/OAuth.jsx";
+import {AiFillRobot} from 'react-icons/ai'
 
 
 function SignIn() {
@@ -48,15 +49,23 @@ function SignIn() {
 
   return (
     <div className=" min-h-screen">
-      <div className="  mt-20 max-w-3xl mx-auto px-16 md:px-5 flex flex-col md:flex-row gap-20 justify-center items-center ">
+      <div className="  pt-32 max-w-3xl mx-auto px-16 md:px-5 flex flex-col md:flex-row gap-20 justify-center items-center ">
         {/* left */}
         <div className=" flex-1 flex flex-col items-center md:items-start">
-          <Link to={"/"} className=" text-4xl text-black font-bold">
-            OpenPost
-          </Link>
-          <p className="mt-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque
-            vero perferendis tempore dolorem necessitatibus minima!
+        <Link
+        to={"/"}
+        className=" text-nowrap pl-2 flex items-center gap-2 text-2xl  "
+      >
+        <span className="text-3xl  text-teal-500  ">
+          <AiFillRobot />
+        </span>
+
+        <span className="font-mono hidden sm:inline transition-all duration-300 dark:text-white md:text-2xl text-black   font-bold">
+          OpenPost
+        </span>
+      </Link>
+      <p className="mt-4 text-center">
+          Welcome to OpenPost - your platform for sharing stories, exchanging ideas, and connecting with a diverse community.
           </p>
         </div>
 
