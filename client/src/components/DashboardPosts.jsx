@@ -168,12 +168,14 @@ function DashboardPosts() {
         <p>failed to load the posts for you</p>
       )}
       {showMore && (
-        <button
+        <Button
+          color={'dark'}
+          pill
           onClick={handleShowMore}
-          className=" mt-5 self-center text-teal-400"
+          className=" mt-5 self-center "
         >
           Load More
-        </button>
+        </Button>
       )}
     </div>
     <Modal

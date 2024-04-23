@@ -123,7 +123,7 @@ function DashboardComments() {
         </div>
       )}
       <div className=" flex table-auto  flex-col p-3   flex-1  overflow-x-scroll  scrollbar-track-gray-700 scrollbar-thumb-gray-500 dark:scrollbar-track-gray-500 dark:scrollbar-thumb-gray-400">
-        {currentUser.isAdmin && comments.length > 0 ? (
+        {currentUser.isAdmin && comments && comments.length > 0 ? (
           <Table className=" shadow">
             <Table.Head className="">
               <Table.HeadCell className=" whitespace-nowrap">
@@ -190,12 +190,14 @@ function DashboardComments() {
           <p>failed to load the comments for you</p>
         )}
         {showMore && (
-          <button
+          <Button
+            color={"dark"}
             onClick={handleShowMore}
-            className=" mt-5 self-center text-teal-400"
+            pill
+            className=" mt-5 self-center "
           >
             Load More
-          </button>
+          </Button>
         )}
       </div>
       <Modal
