@@ -45,7 +45,7 @@ function Header() {
           OpenPost
         </span>
       </Link>
-      <form>
+      {/* <form>
         <div className=" hidden sm:inline">
           <TextInput
             type="text"
@@ -55,7 +55,7 @@ function Header() {
             sizing={"sm"}
           />
         </div>
-      </form>
+      </form> */}
 
       <div className="flex justify-center items-center gap-3 md:order-2">
         <Button

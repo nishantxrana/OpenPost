@@ -12,6 +12,7 @@ import CreatePost from "./Pages/CreatePost";
 import UpdatePost from "./Pages/UpdatePost";
 import PostPage from "./Pages/PostPage";
 import ScrollToTop from "./components/ScrollToTop";
+import Search from "./Pages/Search";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/createPost" element={<CreatePost />} />
         </Route>
         <Route path="/post/:slug" element={<PostPage />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </BrowserRouter>
   );

@@ -52,8 +52,8 @@ function Posts() {
   return (
     <div className="pt-14 w-full h-full pb-6   px-4">
       <div>
-        <h1 className="text-4xl my-4 font-bold dark:text-white text-center text-gray-900">
-          Posts
+        <h1 className="text-4xl font-mono my-4 font-bold dark:text-white text-center text-gray-900">
+          All Posts
         </h1>
       </div>
       <div className="w-full  flex flex-wrap justify-evenly  h-full">
