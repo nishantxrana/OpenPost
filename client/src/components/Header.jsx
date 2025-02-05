@@ -111,11 +111,11 @@ function Header() {
             Home
           </Navbar.Link>
         </Link>
-        <Link to={"/about"}>
+{/*         <Link to={"/about"}>
           <Navbar.Link className="flex justify-center" active={currentLocation === "/about"} as={"div"}>
             About
           </Navbar.Link>
-        </Link>
+        </Link> */}
         <Link to={"/posts"}>
           <Navbar.Link className="flex justify-center" active={currentLocation === "/project"} as={"div"}>
             Posts
